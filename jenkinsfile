@@ -1,47 +1,42 @@
-pipeline{
+pipeline {
+    agent any
 
-      any agent
-
-      stages{
-
-            stage("Install dependencies"){
-                  steps{
-                        bat 'pip install -r requirements.txt'
-                  }
+    stages {
+        stage("Install dependencies") {
+            steps {
+                bat 'pip install -r requirements.txt'
             }
+        }
 
-            stage("Run tests"){
-                  steps{
-                        bat 'pytest tests/ --html=Test_result.html '
-                  }
+        stage("Run tests") {
+            steps {
+                bat 'pytest tests/ --html=Test_result.html'
             }
+        }
 
-            stage("Archive reports"){
-                  steps{
-                        archiveArtifacts artifacts: 'Test_result.html', fingerprint:true
-                  }
+        stage("Archive reports") {
+            steps {
+                archiveArtifacts artifacts: 'Test_result.html', fingerprint: true
             }
+        }
 
-            stage("publish reports"){
-
-                  steps{
-                        publishHTML (target:[
-                              reportdir:'.',
-                              reportName:'Flipkart Automation report',
-                              reportFiles:'Test_result.html'
-                              keepAll:true,
-                              alwaysLinkToLastBuild:true,
-                              allowMissing:true
-                        ])
-                  }
+        stage("Publish reports") {
+            steps {
+                publishHTML(target: [
+                    reportDir: '.',
+                    reportFiles: 'Test_result.html',
+                    reportName: 'Flipkart Automation report',
+                    keepAll: true,
+                    alwaysLinkToLastBuild: true,
+                    allowMissing: true
+                ])
             }
+        }
+    }
 
-
-      }
-
-      post {
-            always{
-                  echo "!! Pipeline execution successfull !!"
-            }
-      }
+    post {
+        always {
+            echo "!! Pipeline execution successful !!"
+        }
+    }
 }
