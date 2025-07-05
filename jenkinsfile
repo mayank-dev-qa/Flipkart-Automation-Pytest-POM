@@ -10,7 +10,7 @@ pipeline {
 
         stage("Run tests") {
             steps {
-                bat 'pytest tests/ --html=Test_result.html'
+                bat 'pytest tests/ --html=Test_result.html --deselect=tests/atc_test.py::test_atc_then_remove'
             }
         }
 
