@@ -1,0 +1,47 @@
+pipeline{
+
+      any agent
+
+      stages{
+
+            stage("Install dependencies"){
+                  steps{
+                        bat 'pip install -r requirements.txt'
+                  }
+            }
+
+            stage("Run tests"){
+                  steps{
+                        bat 'pytest tests/ --html=Test_result.html '
+                  }
+            }
+
+            stage("Archive reports"){
+                  steps{
+                        archiveArtifacts artifacts: 'Test_result.html', fingerprint:true
+                  }
+            }
+
+            stage("publish reports"){
+
+                  steps{
+                        publishHTML target:[
+                              reportdir:'.',
+                              reportName:'Flipkart Automation report',
+                              reportFiles:'Test_result.html'
+                              keepAll:true,
+                              alwaysLinkToLastBuild:true,
+                              allowMissing:true
+                        ]
+                  }
+            }
+
+
+      }
+
+      post {
+            always{
+                  echo "!! Pipeline execution successfull !!"
+            }
+      }
+}
