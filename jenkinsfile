@@ -25,14 +25,14 @@ pipeline{
             stage("publish reports"){
 
                   steps{
-                        publishHTML target:[
+                        publishHTML (target:[
                               reportdir:'.',
                               reportName:'Flipkart Automation report',
                               reportFiles:'Test_result.html'
                               keepAll:true,
                               alwaysLinkToLastBuild:true,
                               allowMissing:true
-                        ]
+                        ])
                   }
             }
 
